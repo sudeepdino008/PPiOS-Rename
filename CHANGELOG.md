@@ -2,6 +2,14 @@ Change Log
 ==========
 
 
+1.3.0
+-----------------------
+
+### Enhancements:
+### Changes:
+### Fixes:
+
+
 1.2.0
 -----------------------
 ### Enhancements:
