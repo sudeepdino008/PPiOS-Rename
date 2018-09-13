@@ -11,8 +11,6 @@ PreEmptive Protection for iOS - Rename
 
 *PPiOS-Rename* works with more than just your project's code. It also automatically finds symbols to exclude from renaming by looking at all external/dependent frameworks and in Core Data (xcdatamodel) files. The renamed symbols will also be applied to your XIB/Storyboard files, and to any open-source CocoaPods libraries in your project.
 
-[PreEmptive Solutions](https://www.preemptive.com/) also offers another product, [PreEmptive Protection for iOS - Control Flow](https://www.preemptive.com/products/ppios), that includes additional obfuscation transforms. *PPiOS-Rename* is meant to work alongside *PPiOS-ControlFlow*; together they provide much better protection than either one alone can provide.
-
 *PPiOS-Rename* is licensed under the GNU GPL v2, but commercial support is also available from [PreEmptive Solutions](https://www.preemptive.com/contact/contactus) via a commercial support agreement. Please see LICENSE.txt for details.
 
 > DEVELOPER NOTE: This fork includes a substantial rewrite of the git history, to fix [a corrupted commit in the original repo](https://github.com/nygard/class-dump/commit/509591f78f37905913ba0cbd832e5e4f7b925a8a). More details are in [the changelog](CHANGELOG.md).
@@ -165,14 +163,6 @@ Once renaming has been applied to the sources, the process of building and testi
 If you modify the original build target or scheme, be sure to delete and recreate the Build and Analyze target as above. Under certain conditions, the Apply Renaming target and scheme will need to be recreated as well.
 
 
-Using PPiOS-Rename with PPiOS-ControlFlow
------------------------------------------
-
-*PreEmptive Protection for iOS - Rename* (*PPiOS-Rename)* provides the "renaming" obfuscation, which is the most-common type of obfuscation typically applied to applications to help protect them from reverse engineering, intellectual property theft, software piracy, tampering, and data loss. There are additional obfuscation techniques, however, that are critically important for serious protection of apps. [PreEmptive Solutions](https://www.preemptive.com/) offers another product, [PreEmptive Protection for iOS - Control Flow](https://www.preemptive.com/products/ppios), that includes additional obfuscation transforms. *PPiOS-Rename* is meant to work alongside *PPiOS-ControlFlow*; together they provide much better protection than either one alone can provide.
-
-Simple instructions for using them together are available in the documentation for *PPiOS-ControlFlow*.
-
-
 Demonstration
 -------------
 
@@ -190,17 +180,7 @@ Reverse engineered code with PPiOS-Rename:
 
 <img width="350" alt="renamed-sized" src="https://raw.githubusercontent.com/preemptive/PPiOS-Rename/master/images/renamed-sized.png">
 
-Reverse engineered code with both *PPiOS-Rename* and *PPiOS-ControlFlow*:
-
-<img width="350" alt="controlflow-sized" src="https://raw.githubusercontent.com/preemptive/PPiOS-Rename/master/images/controlflow-sized.png">
-
-As seen, the code is relatively straightforward to understand with no obfuscation. It's not obvious after applying *PPiOS-Rename* obfuscation, but the logic could still be inferred by the system framework methods being used. And finally, it's extremely difficult to understand the logic in the last version with *PPiOS-ControlFlow* obfuscation. The decompiled code was actually significantly longer than shown here.
-
-
-Sample Project
---------------
-
-A sample project demonstrating the process of obfuscating an iOS app is available on GitHub: [PPiOS-Sample-Vie](https://github.com/preemptive/PPiOS-Sample-Vie). This project uses both *PPiOS-ControlFlow* and *PPiOS-Rename*, but can be used to examine their effects independently. All of the steps required to integrate *PPiOS* into an existing Xcode project have already been applied. The configuration has also been adjusted to ensure a positive user experience with the obfuscated app. Documentation for the project discusses in detail how to build and use the sample, how the project was configured, and how to interpret the build output.
+The reverse engineered code is relatively straightforward to understand without obfuscation. It is less than obvious what this code is doing without the original names.
 
 
 Troubleshooting
@@ -374,31 +354,27 @@ This error happens when `--analyze` is used on an already obfuscated binary. Thi
 Advanced Topics
 ---------------
 
-### Locating the Binary and dSYM Files.
+### Locating the Obfuscated Binary
 
-When looking to verify obfuscation or send de-obfuscated dSYMs to analytics services, you must first locate the binary and dSYM files.
+When looking to verify obfuscation, you must first locate the obfuscated binary.
 
 #### Xcode Archive
 
 If you created an archive, Xcode would have placed it in the *archives* directory, `~/Library/Developer/Xcode/Archives/{Date}/{AppName} {Date}, {Time}.xcarchive`. Inside there, you should find:
 
   * Binary: `Products/Applications/{AppName}.app/{AppName}`
-  * dSYM: `dSYMs/{AppName}.app.dSYM
-  >Note: If you have uploaded your archive to Apple's App Store it may have been recompiled from bitcode and you would need to download the new dSYM files from either <https://itunesconnect.apple.com> or by using the *Download dSYMS...* button in Xcode's *Organizer* window. The *Download dSYMS...* button will download a dSYM for each architecture to the same `dSYMs` in the *archives* directory, but it will be named `{SOME GUID}.dSYM`.
 
 #### .ipa File
 
 If you have an `{AppName}.ipa` file, you will need to extract it by running `unzip {AppName}.ipa`. Inside the `Payload` directory, you should find:
 
   * Binary: `{AppName}.app/{AppName}`
-  * dSYM: Is **not** included in the `.ipa` file.
 
 #### Command Line Build
 
 If you build from the command line (e.g. `xcodebuild`), this will typically create a `build` directory. Inside the `build` directory, you should find:
 
    * Binary: `Release-[iphoneos|iphonesimulator]/{AppName}.app/{AppName}`
-   * dSYM: `Release-[iphoneos|iphonesimulator]/{AppName}.app.dSYM`
 
 ### Verifying obfuscation
 
@@ -422,22 +398,6 @@ This will show the symbols from your app. If you do this with an unobfuscated bu
 *PPiOS-Rename* lets you reverse the process of obfuscation for crash dump files. This is important so you can find the original classes and methods involved in a crash. It does this by using the information from a map file (e.g. `symbols.map`) to modify the crash dump text, replacing the obfuscated symbols with the original names. For example:
 
     ppios-rename --translate-crashdump --symbols-map path/to/symbols_x.y.z.map path/to/crashdump path/to/output
-
-### Reversing obfuscation in dSYMs
-
-It is possible to reverse the process of obfuscation in dSYMs by using a utility included with [PPiOS-ControlFlow](https://www.preemptive.com/products/ppios). The de-obfuscated dSYMs let you see the original names in automatic crash reporting tools such as HockeyApp, Crashlytics, Fabric, BugSense/Splunk Mint, or Crittercism. It does this by using the information from a map file (e.g. `symbols.map`) to generate a "reverse dSYM" file that has the non-obfuscated symbol names in it. For example:
-
-    /usr/local/share/preemptive/PPiOS/bin/llvm-dsymutil -ppios-map=path/to/symbols_x.y.z.map path/to/input.dSYM -o=path/to/output.dSYM
-
->Note: If you do not specify an output dSYM by passing the `-o` argument, the input dSYM **itself** will be altered by running the `llvm-dsymutil` command.
-
-The resulting dSYM file can be uploaded to e.g. HockeyApp.
-
-dSYMs use a binary format that must be interpreted correctly by `llvm-dsymutil`. Thus the version of `llvm-dsymutil` from *PPiOS-ControlFlow* must match the major version of Xcode used to produce the dSYMs. For example, `llvm-dsymutil` from *PPiOS-ControlFlow* version 2.5 can only be used with Xcode 8, the latest version of Xcode supported by this version of *PPiOS-ControlFlow*.
-
-Until Xcode 9 is supported by *PPiOS-ControlFlow*, dSYM translation is unavailable for apps or libraries built with Xcode 9.
-
-> DEVELOPER NOTE: The original `--translate-dsym` logic did not work properly with small symbol names nor when the obfuscated names were a different size than the originals. It has been replaced by a feature in *PPiOS-ControlFlow*.
 
 ### Analyzing Dynamic Frameworks
 
@@ -595,4 +555,4 @@ ppios-rename --help
 ```
 
 ---------------------------------------------------------------------
-Copyright 2016-2017 PreEmptive Solutions, LLC
+Copyright 2016-2018 PreEmptive Solutions, LLC

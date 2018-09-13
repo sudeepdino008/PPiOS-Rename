@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#Copyright 2016-2017 PreEmptive Solutions, LLC
+#Copyright 2016-2018 PreEmptive Solutions, LLC
 #See LICENSE.txt for licensing information
 
 targetAppName=BoxSim
@@ -33,7 +33,6 @@ verifyFails test -z "${NUMERIC_VERSION}"
 # Some lines that follow that have trailing backslashes are newlines embedded in the sed
 # replacement text, do not indent or otherwise alter.  
 versionNumbers=$(cat "${README}" \
-    | sed 's,\*PPiOS-ControlFlow\* version 2\.5 ,,g' \
     | sed -n 's,\([1-9][0-9]*[.][0-9][0-9]*\([.][0-9][0-9]*\)*\),\
 \1\
 ,pg' | grep '[1-9][0-9]*[.][0-9][0-9]*\([.][0-9][0-9]*\)*')
