@@ -150,13 +150,18 @@ static BOOL debug = NO;
 
 #pragma mark -
 
-- (void)process;
+- (int)process;
 {
     if ([self.machOFile isEncrypted] == NO && [self.machOFile canDecryptAllSegments]) {
-        [super process];
+        int result = [super process];
+        if (result != 0) {
+            return result;
+        }
 
         [self processModules];
     }
+    
+    return 0;
 }
 
 #pragma mark - Formerly private

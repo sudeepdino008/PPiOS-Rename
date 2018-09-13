@@ -249,13 +249,18 @@ static NSDictionary<NSValue *, NSArray<NSValue *> *> *supportedArches = nil;
 
 #pragma mark -
 
-- (void)processObjectiveCData;
+- (int)processObjectiveCData;
 {
     for (CDMachOFile *machOFile in self.machOFiles) {
         CDObjectiveCProcessor *processor = [[[machOFile processorClass] alloc] initWithMachOFile:machOFile];
-        [processor process];
+        int result = [processor process];
+        if (result != 0) {
+            return result;
+        }
         [_objcProcessors addObject:processor];
     }
+    
+    return 0;
 }
 
 // This visits everything segment processors, classes, categories.  It skips over modules.  Need something to visit modules so we can generate separate headers.
@@ -265,9 +270,6 @@ static NSDictionary<NSValue *, NSArray<NSValue *> *> *supportedArches = nil;
 
     NSEnumerator *objcProcessors;
     objcProcessors = [self.objcProcessors reverseObjectEnumerator];
-
-
-
 
     for (CDObjectiveCProcessor *processor in objcProcessors) {
         [processor recursivelyVisit:visitor];

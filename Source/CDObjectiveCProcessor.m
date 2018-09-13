@@ -136,7 +136,7 @@
 
 #pragma mark - Processing
 
-- (void)process;
+- (int)process;
 {
     if (self.machOFile.isEncrypted == NO && self.machOFile.canDecryptAllSegments) {
         [self.machOFile.symbolTable loadSymbols];
@@ -146,9 +146,14 @@
         [self.protocolUniquer createUniquedProtocols];
 
         // Load classes before categories, so we can get a dictionary of classes by address.
-        [self loadClasses];
+        int result = [self loadClasses];
+        if (result != 0) {
+            return result;
+        }
         [self loadCategories];
     }
+    
+    return 0;
 }
 
 - (void)loadProtocols;
@@ -156,9 +161,10 @@
     // Implement in subclasses.
 }
 
-- (void)loadClasses;
+- (int)loadClasses;
 {
     // Implement in subclasses.
+    return 0;
 }
 
 - (void)loadCategories;
