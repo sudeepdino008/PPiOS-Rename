@@ -8,9 +8,11 @@ Change Log
 ### Enhancements:
 ### Changes:
 
-* Removed references to PPiOS-ControlFlow and PPiOS-Sample-Vie from all other files.
+* Removed references to PPiOS-ControlFlow and PPiOS-Sample-Vie from all other files. (\#17218)
 
 ### Fixes:
+
+* An explicit error message is now emitted when Swift classes are encountered. (\#17148)
 
 
 1.2.0
