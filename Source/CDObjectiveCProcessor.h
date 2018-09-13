@@ -26,9 +26,9 @@
 
 - (void)addCategory:(CDOCCategory *)category;
 
-- (void)process;
+- (int)process;
 - (void)loadProtocols;
-- (void)loadClasses;
+- (int)loadClasses;
 - (void)loadCategories;
 
 - (void)registerTypesWithObject:(CDTypeController *)typeController phase:(NSUInteger)phase;

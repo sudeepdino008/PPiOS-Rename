@@ -39,7 +39,7 @@
 @property (readonly) CDTypeController *typeController;
 
 - (BOOL)loadFile:(CDFile *)file error:(NSError **)error depth:(int)depth;
-- (void)processObjectiveCData;
+- (int)processObjectiveCData;
 
 - (void)recursivelyVisit:(CDVisitor *)visitor;
 

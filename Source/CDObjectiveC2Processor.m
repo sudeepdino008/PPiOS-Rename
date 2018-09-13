@@ -34,7 +34,7 @@
         [self protocolAtAddress:[cursor readPtr]];
 }
 
-- (void)loadClasses;
+- (int)loadClasses;
 {
     CDSection *section = [[self.machOFile dataConstSegment] sectionWithName:@"__objc_classlist"];
     
@@ -43,9 +43,15 @@
         uint64_t val = [cursor readPtr];
         CDOCClass *aClass = [self loadClassAtAddress:val];
         if (aClass != nil) {
+            if (aClass.isSwiftClass) {
+                NSLog(@"Error: Swift is not supported: %@", aClass.name);
+                return 1;
+            }
             [self addClass:aClass withAddress:val];
         }
     }
+
+    return 0;
 }
 
 - (void)loadCategories;
@@ -218,7 +224,11 @@
     objc2Class.superclass = [cursor readPtr];
     objc2Class.cache      = [cursor readPtr];
     objc2Class.vtable     = [cursor readPtr];
-    objc2Class.data       = [cursor readPtr];
+
+    uint64_t value        = [cursor readPtr];
+    BOOL isSwiftClass = (value & 0x1) != 0;
+    objc2Class.data       = value & ~7;
+
     objc2Class.reserved1  = [cursor readPtr];
     objc2Class.reserved2  = [cursor readPtr];
     objc2Class.reserved3  = [cursor readPtr];
@@ -254,6 +264,7 @@
     
     CDOCClass *aClass = [[CDOCClass alloc] init];
     [aClass setName:str];
+    aClass.isSwiftClass = isSwiftClass;
     
     for (CDOCMethod *method in [self loadMethodsAtAddress:objc2ClassData.baseMethods])
         [aClass addInstanceMethod:method];
