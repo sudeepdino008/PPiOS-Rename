@@ -93,6 +93,7 @@
         case LC_DATA_IN_CODE:          targetClass = [CDLCDataInCode class]; break;
         case LC_SOURCE_VERSION:        targetClass = [CDLCSourceVersion class]; break;
         case LC_DYLIB_CODE_SIGN_DRS:   targetClass = [CDLCLinkeditData class]; break; // Designated Requirements
+        case 0x32: break; // ignore, this is LC_BUILD_VERSION
             
         default:
             NSLog(@"Unknown load command: 0x%08x", val);
