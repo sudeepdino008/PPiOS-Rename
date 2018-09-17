@@ -171,6 +171,12 @@ static NSDictionary<NSValue *, NSArray<NSValue *> *> *supportedArches = nil;
 }
 
 - (BOOL)loadFile:(CDFile *)file error:(NSError **)error depth:(int)depth {
+//    NSString *indentation = @"";
+//    for (int i = 0; i < depth; i++) {
+//        indentation = [indentation stringByAppendingString:@"  "];
+//    }
+//    NSLog(@"%@Loading: %@", indentation, file.filename);
+
     NSValue *archObject = [NSValue valueOf:_targetArch];
     NSArray<NSValue *> *candidates = [[self class] getSupportedArches][archObject];
     if (candidates == nil) {
@@ -214,7 +220,9 @@ static NSDictionary<NSValue *, NSArray<NSValue *> *> *supportedArches = nil;
             for (CDLoadCommand *loadCommand in [machOFile loadCommands]) {
                 if ([loadCommand isKindOfClass:[CDLCDylib class]]) {
                     CDLCDylib *dylibCommand = (CDLCDylib *)loadCommand;
-                    if ([dylibCommand cmd] == LC_LOAD_DYLIB) {
+                    int command = [dylibCommand cmd];
+                    if ((command == LC_LOAD_DYLIB)
+                            || (command == LC_REEXPORT_DYLIB)) {
                         [self.searchPathState pushSearchPaths:[machOFile runPaths]];
                         {
                             NSString *loaderPathPrefix = @"@loader_path";
