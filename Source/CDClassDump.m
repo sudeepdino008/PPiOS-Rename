@@ -221,8 +221,12 @@ static NSDictionary<NSValue *, NSArray<NSValue *> *> *supportedArches = nil;
                 if ([loadCommand isKindOfClass:[CDLCDylib class]]) {
                     CDLCDylib *dylibCommand = (CDLCDylib *)loadCommand;
                     int command = [dylibCommand cmd];
+
+                    // More commands may need to be added to this list as the SDKs that ship with Xcode change, but for
+                    // now this should be sufficient.
                     if ((command == LC_LOAD_DYLIB)
-                            || (command == LC_REEXPORT_DYLIB)) {
+                            || (command == LC_REEXPORT_DYLIB)
+                            || (command == LC_LOAD_WEAK_DYLIB)) {
                         [self.searchPathState pushSearchPaths:[machOFile runPaths]];
                         {
                             NSString *loaderPathPrefix = @"@loader_path";
