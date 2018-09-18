@@ -313,7 +313,10 @@ static NSDictionary<NSValue *, NSArray<NSValue *> *> *supportedArches = nil;
             //NSLog(@"Did not find it.");
         }
     } else if (self.sdkRoot != nil) {
-        adjustedName = [self.sdkRoot stringByAppendingPathComponent:name];
+        NSString *pathInSDK = [self.sdkRoot stringByAppendingPathComponent:name];
+        
+        // Some libraries cannot be provided by the SDK, they must come from the host system.
+        adjustedName = [[NSFileManager defaultManager] fileExistsAtPath:pathInSDK] ? pathInSDK : name;
     } else {
         adjustedName = name;
     }
