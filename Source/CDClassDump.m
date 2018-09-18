@@ -214,7 +214,13 @@ static NSDictionary<NSValue *, NSArray<NSValue *> *> *supportedArches = nil;
             for (CDLoadCommand *loadCommand in [machOFile loadCommands]) {
                 if ([loadCommand isKindOfClass:[CDLCDylib class]]) {
                     CDLCDylib *dylibCommand = (CDLCDylib *)loadCommand;
-                    if ([dylibCommand cmd] == LC_LOAD_DYLIB) {
+                    int command = [dylibCommand cmd];
+
+                    // More commands may need to be added to this list as the SDKs that ship with Xcode change, but for
+                    // now this should be sufficient.
+                    if ((command == LC_LOAD_DYLIB)
+                            || (command == LC_REEXPORT_DYLIB)
+                            || (command == LC_LOAD_WEAK_DYLIB)) {
                         [self.searchPathState pushSearchPaths:[machOFile runPaths]];
                         {
                             NSString *loaderPathPrefix = @"@loader_path";
@@ -301,7 +307,10 @@ static NSDictionary<NSValue *, NSArray<NSValue *> *> *supportedArches = nil;
             //NSLog(@"Did not find it.");
         }
     } else if (self.sdkRoot != nil) {
-        adjustedName = [self.sdkRoot stringByAppendingPathComponent:name];
+        NSString *pathInSDK = [self.sdkRoot stringByAppendingPathComponent:name];
+        
+        // Some libraries cannot be provided by the SDK, they must come from the host system.
+        adjustedName = [[NSFileManager defaultManager] fileExistsAtPath:pathInSDK] ? pathInSDK : name;
     } else {
         adjustedName = name;
     }

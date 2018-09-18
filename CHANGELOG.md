@@ -12,6 +12,7 @@ Change Log
 
 ### Fixes:
 
+* Reexported dependencies now get loaded to support SDKs that ship with Xcode 10. (\#17068)
 * An explicit error message is now emitted when Swift classes are encountered. (\#17148)
 
 
