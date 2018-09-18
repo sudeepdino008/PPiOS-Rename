@@ -44,7 +44,7 @@
         CDOCClass *aClass = [self loadClassAtAddress:val];
         if (aClass != nil) {
             if (aClass.isSwiftClass) {
-                NSLog(@"Error: Swift is not supported: %@", aClass.name);
+                NSLog(@"Error: PPiOS-Rename cannot process apps containing Swift code: %@", aClass.name);
                 return 1;
             }
             [self addClass:aClass withAddress:val];
