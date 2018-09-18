@@ -171,12 +171,6 @@ static NSDictionary<NSValue *, NSArray<NSValue *> *> *supportedArches = nil;
 }
 
 - (BOOL)loadFile:(CDFile *)file error:(NSError **)error depth:(int)depth {
-//    NSString *indentation = @"";
-//    for (int i = 0; i < depth; i++) {
-//        indentation = [indentation stringByAppendingString:@"  "];
-//    }
-//    NSLog(@"%@Loading: %@", indentation, file.filename);
-
     NSValue *archObject = [NSValue valueOf:_targetArch];
     NSArray<NSValue *> *candidates = [[self class] getSupportedArches][archObject];
     if (candidates == nil) {
