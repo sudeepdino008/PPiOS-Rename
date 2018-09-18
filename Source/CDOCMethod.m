@@ -10,6 +10,8 @@
 #import "CDTypeParser.h"
 #import "CDTypeController.h"
 
+static BOOL debug = NO;
+
 @implementation CDOCMethod
 {
     NSString *_name;
@@ -69,8 +71,9 @@
 
         CDTypeParser *parser = [[CDTypeParser alloc] initWithString:self.typeString];
         _parsedMethodTypes = [parser parseMethodType:&error];
-        if (_parsedMethodTypes == nil)
+        if ((_parsedMethodTypes == nil) && debug) {
             NSLog(@"Warning: Parsing method types failed, %@", self.name);
+        }
         _hasParsedType = YES;
     }
 

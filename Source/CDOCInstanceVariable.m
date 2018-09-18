@@ -11,6 +11,8 @@
 #import "CDTypeController.h"
 #import "CDType.h"
 
+static BOOL debug = NO;
+
 @interface CDOCInstanceVariable ()
 @property (assign) BOOL hasParsedType;
 @end
@@ -60,7 +62,9 @@
         NSError *error;
         _type = [parser parseType:&error];
         if (_type == nil) {
-            NSLog(@"Warning: Parsing instance variable type failed, %@", self.name);
+            if (debug) {
+                NSLog(@"Warning: Parsing instance variable type failed, %@", self.name);
+            }
             _parseError = error;
         } else {
             self.hasParsedType = YES;
