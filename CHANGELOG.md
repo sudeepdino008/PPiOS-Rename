@@ -6,14 +6,17 @@ Change Log
 -----------------------
 
 ### Enhancements:
+
+* Now supports Xcode 10 and iOS 12.
+* An explicit error message is now emitted when Swift classes are encountered.
+
 ### Changes:
 
-* Removed references to PPiOS-ControlFlow and PPiOS-Sample-Vie from all other files. (\#17218)
+* References to PPiOS-ControlFlow and PPiOS-Sample-Vie have been removed from all other files.
 
 ### Fixes:
 
-* Reexported dependencies now get loaded to support SDKs that ship with Xcode 10. (\#17068)
-* An explicit error message is now emitted when Swift classes are encountered. (\#17148)
+* Dependencies included for re-export were previously ignored, but are now searched for symbols.
 
 
 1.2.0
