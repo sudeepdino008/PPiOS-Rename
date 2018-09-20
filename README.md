@@ -1,7 +1,7 @@
 PreEmptive Protection for iOS - Rename
 ======================================
 
-*PreEmptive Protection for iOS - Rename*, or *PPiOS-Rename* for short, is a command line utility for obfuscating Objective-C class, protocol, property, and methods names, in iOS apps. It is a fork of [iOS-Class-Guard](https://github.com/Polidea/ios-class-guard) from [Polidea](https://www.polidea.com/), with extensive improvements and modifications.
+*PreEmptive Protection for iOS - Rename*, or *PPiOS-Rename* for short, is a tool for obfuscating Objective-C class, protocol, property, and methods names, in iOS apps. It is a fork of [iOS-Class-Guard](https://github.com/Polidea/ios-class-guard) from [Polidea](https://www.polidea.com/), with extensive improvements and modifications.
 
 *PPiOS-Rename* works by generating a special set of `#define` statements (e.g. `#define createArray y09FzL7T`) that automatically rename symbols during compilation. It includes a number of features:
 
@@ -401,7 +401,7 @@ You then need to determine and use the proper filters. You will need to choose o
 
 ### Obfuscating Static Libraries
 
-Static libraries cannot be directly processed by *PPiOS-Rename*, but it is possible to work around the technical issue preventing direct processing. Although the initial setup is somewhat involved, once this is complete the build process is no more complicated than with *PPiOS-Rename* other projects. The basic idea is:
+Static libraries cannot be directly processed by *PPiOS-Rename*, but it is possible to work around the technical issue preventing direct processing. Although the initial setup is somewhat involved, once this is complete the build process is no more complicated than with other *PPiOS-Rename* projects. The basic idea is:
 
 1. Create a workspace to simplify interactions with the library.
 2. Create an app that uses the static library.

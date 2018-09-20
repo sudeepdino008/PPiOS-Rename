@@ -13,6 +13,7 @@ Change Log
 ### Changes:
 
 * References to PPiOS-ControlFlow and PPiOS-Sample-Vie have been removed from all other files.
+* Xcode 8 is no longer supported.
 
 ### Fixes:
 
