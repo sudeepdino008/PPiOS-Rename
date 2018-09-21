@@ -421,8 +421,8 @@ The procedure is as follows:
 
 2. From within the workspace, create a new project:
     1. In Xcode, go to `File` > `New` > `Project ...`.
-    2. Select `iOS`, under the `Application` section select `Single View App`, and then select `Next`.
-    3. For the options: specify the `Product Name` as `WrappingApp`, be sure to select Objective-C as the language, and select `Next`.
+    2. Select `iOS`, then under the `Application` section select `Single View App`, and then select `Next`.
+    3. For the options: specify the `Product Name` as `WrappingApp` and be sure to select Objective-C as the language, then select `Next`.
     4. Create the project:
         1. Specify the directory to store the `WrappingApp` project as a sibling of the static library's project directory. These instructions expect a source tree layout like the following, with everything under `someParentDir` under source control:
 
