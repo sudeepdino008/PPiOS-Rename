@@ -44,9 +44,6 @@ Change Log
 
 ### Changes:
 
-* The `--translate-dsym` functionality was migrated to PPiOS-ControlFlow (See README.md for more information).
-* Removed dependency on the ahocorasick library.
-
 1.0.1
 -----------------------
 ### Enhancements:
