@@ -398,7 +398,7 @@ int main(int argc, char *argv[])
                 }
             }
         }else if(shouldAnalyze){
-            if(firstArg == nil){
+             if(firstArg == nil){
                 terminateWithError(1, "Input file must be specified for --analyze");
             }
             NSString *executablePath = nil;

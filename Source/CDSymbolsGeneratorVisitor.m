@@ -319,7 +319,7 @@ static NSString *const lettersSet[maxLettersSet] = {
         //Maybe there is a conflict in a property, so generate a new name and let the guard be inserted later
         _guardName = nil;
     }
-    NSInteger length = 8;
+    NSInteger length = MAX(8, originalName.length);
     while (true) {
         NSMutableString *randomString = [NSMutableString stringWithCapacity:length];
         if (prefix) {
@@ -342,7 +342,12 @@ static NSString *const lettersSet[maxLettersSet] = {
 }
 
 - (NSString *)generateRandomString:(NSString *)originalName{
-    return [self generateRandomStringWithPrefix:nil andName:originalName];
+    if ([originalName hasPrefix:@"ZDR"]) {
+        NSLog(@"class/protocol/category....need to attach ZDR prefix", originalName);
+        return [self generateRandomStringWithPrefix:@"ZDR" andName:originalName];
+    } else {
+        return [self generateRandomStringWithPrefix:nil andName:originalName];
+    }
 }
 
 - (BOOL)doesContainGeneratedSymbol:(NSString *)symbol {
@@ -405,12 +410,23 @@ static NSString *const lettersSet[maxLettersSet] = {
     if (symbol.length > 1) {
         NSString *prefix = [symbol substringToIndex:2];
         if ([prefix isEqualToString:[prefix uppercaseString]]) {
+//            if ([self stringIsNumeric:[prefix substringWithRange:NSMakeRange(0, 1)]] ||
+//                [self stringIsNumeric:[prefix substringWithRange:NSMakeRange(1, 1)]]) {
+//                NSLog(@"symbol gg:%@", symbol);
+//                return YES;
+//            }
             return NO;
         }
     } else if ([symbol isEqualToString:[symbol uppercaseString]]) {
         return NO;
     }
     return YES;
+}
+
+-(BOOL) stringIsNumeric:(NSString *) str {
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    NSNumber *number = [formatter numberFromString:str];
+    return !!number; // If the string is not numeric, number will be nil
 }
 
 - (NSString *)setterNameForMethodName:(NSString *)methodName {

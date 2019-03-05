@@ -58,6 +58,7 @@
     tmpText.length = (unsigned int)contentPseudoStringLength;
     ac_automata_settext(atm, &tmpText, 0);
 
+//    ac_automata_display(atm, 'n');   //display the automata
     NSMutableDictionary *replaces = [[NSMutableDictionary alloc] init];
 
     AC_MATCH_t *matchPattern;
@@ -73,8 +74,7 @@
 
         NSString *pattern = [[NSString alloc] initWithBytes:matchPattern->patterns[maxStringIdx].astring
                                                      length:matchPattern->patterns[maxStringIdx].length * sizeof(char)
-                                                   encoding:NSASCIIStringEncoding
-        ];
+                                                   encoding:NSASCIIStringEncoding];
         NSNumber *position = @(matchPattern->position - matchPattern->patterns[maxStringIdx].length);
 
         NSMutableArray * array = replaces[pattern];
@@ -90,7 +90,8 @@
     // TODO: exclude visited ranges
     for (NSString *pattern in replaces.allKeys) {
         for (NSNumber *position in replaces[pattern]) {
-            [self replaceSymbol:pattern withSymbol:symbols[pattern] inPseudoCString:&contentPseudoString onPosition:[position unsignedIntegerValue]];
+            [self replaceSymbol:pattern withSymbol:symbols[pattern] inPseudoCString:&contentPseudoString onPosition:[position unsignedLongValue]];
+//            [[[NSData alloc] initWithBytes:contentPseudoString length:contentPseudoStringLength * sizeof(char)] writeToFile:@"/tmp/file.txt" atomically:YES];
         }
     }
 
@@ -109,7 +110,7 @@
 
     // TODO: add check if right symbol is going to be changed
     for (NSUInteger location = 0; location < finalSymbolLength; ++location) {
-        pseudoCString[position+location] = (location < toSymbol.length ? toSymbolCStr[location] : (char)'\0'); // if fromSymbol is longer than toSymbol - we're adding binary zeros
+        pseudoCString[position+location] = (location < toSymbol.length ? toSymbolCStr[location] : (char)'?'); // if fromSymbol is longer than toSymbol - we're adding binary zeros
     }
 }
 
